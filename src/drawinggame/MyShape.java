@@ -1,5 +1,6 @@
 package drawinggame;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -45,6 +46,7 @@ public class MyShape {
     
     public void drawShape(Graphics2D g2){
         g2.setPaint(color);
+        g2.setStroke(new BasicStroke((float)(size)));
         if (points.isEmpty()){
             return;
         }
@@ -57,6 +59,7 @@ public class MyShape {
     
     public void drawBox(Graphics2D g2){
         g2.setPaint(Color.BLACK);
+        g2.setStroke(new BasicStroke(1));
         if (points.isEmpty()){
             return;
         }       
