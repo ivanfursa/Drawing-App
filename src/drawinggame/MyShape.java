@@ -1,5 +1,6 @@
 package drawinggame;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
@@ -8,8 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class MyShape {
-    // An elementary unit of shape is a dot. For now, a dot is a rectangle.
-    private ArrayList<Rectangle2D> dots = new ArrayList<>();
+    private ArrayList<Point2D> points = new ArrayList<>();
     private Color color;
     private double size;
     private boolean drawn = false;  // Identifies if the shape has been drawn.
@@ -21,22 +21,16 @@ public class MyShape {
     public MyShape(Point2D point, Color color, double size){
         this.color = color;
         this.size = size;
-        
-        // Calculations for a box enclosure.
+        points.add(point);
         xMin = point.getX();
         xMax = point.getX();
         yMin = point.getY();
         yMax = point.getY();
-        
-        // Creating a dot (a rectangle).
-        addDot(point);
     }
     public MyShape(){}
     
     public void addPoint(Point2D point){
-        addDot(point);
-        
-        // Calculations for a box enclosure.
+        points.add(point);
         if (point.getX() < xMin)
             xMin = point.getX();
         else if (point.getX() > xMax)
@@ -47,36 +41,26 @@ public class MyShape {
             yMax = point.getY();
     }
     
-    public void addDot(Point2D point){
-        double x = point.getX();
-        double y = point.getY();
-        
-        // Otherwise, a rectangle will have 0 width and length.
-        if (size > 1){
-            x = x - size/2;
-            y = y - size/2;
-        }
-        
-        Rectangle2D dot = new Rectangle2D.Double(x, y, size, size);
-        dots.add(dot);
-    }
-    
     public void setAsDrawn() {drawn = true;}
     public boolean isDrawn() {return drawn;}
     
     public void drawShape(Graphics2D g2){
         g2.setPaint(color);
-        if (dots.isEmpty()){
+        g2.setStroke(new BasicStroke((float)(size)));
+        if (points.isEmpty()){
             return;
         }
-        for (Rectangle2D dot : dots){
-            g2.fill(dot);
+        Point2D start = points.get(0);
+        for (Point2D end : points){
+            g2.draw(new Line2D.Double(start, end));
+            start = end;
         }
     }
     
     public void drawBox(Graphics2D g2){
         g2.setPaint(Color.BLACK);
-        if (dots.isEmpty()){
+        g2.setStroke(new BasicStroke(1));
+        if (points.isEmpty()){
             return;
         }       
         // Draw a rectangle enclosing the shape.
