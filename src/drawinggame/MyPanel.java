@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 
 public class MyPanel extends JPanel{
     ArrayList<MyShape> shapes = new ArrayList<>();
-    private Color currentColor;
-    private double currentSize;
+    private Color currentColor = Color.RED;
+    private double currentSize = 1;
     
     public MyPanel(){
         addMouseListener(new MouseAdapter(){
