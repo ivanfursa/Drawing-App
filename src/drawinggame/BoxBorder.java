@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 
 class BoxBorder {
     // The corners of the box enclosure.
-    private double xMin, xMax, yMin, yMax;
+    public double xMin, xMax, yMin, yMax;
     private double size;
     
     public BoxBorder(double xMin, double xMax,

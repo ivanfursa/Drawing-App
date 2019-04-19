@@ -34,6 +34,17 @@ public class Shape {
     
     public BoxBorder getBox() {return box;}
     
+    public boolean isSelected(Point2D point){
+        if (point.getX() < box.xMax && point.getX() > box.xMin){
+            if (point.getY() < box.yMax && point.getY() > box.yMin)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    
     public void drawShape(Graphics2D g2){
         g2.setPaint(color);
         g2.setStroke(new BasicStroke((float)(size)));

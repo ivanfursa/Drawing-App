@@ -13,6 +13,7 @@ public class Canvas extends JPanel{
     ArrayList<Shape> shapes = new ArrayList<>();
     private Color currentColor = Color.RED;
     private double currentSize = 1;
+    private Shape selectedShape = null;
     
     public Canvas(){
         addMouseListener(new MouseAdapter(){
@@ -30,6 +31,19 @@ public class Canvas extends JPanel{
            public void mouseReleased(MouseEvent e){
                 if(e.getButton() == 1)
                     shapes.get(shapes.size()-1).setAsDrawn();
+           }
+           public void mouseClicked(MouseEvent e){
+                if(e.getButton() == 1){
+                    selectedShape = null;
+                    int count = 0;
+                    Shape shape;
+                    while (count < shapes.size() && selectedShape == null){
+                        shape = shapes.get(count);
+                        if (shape.isSelected(e.getPoint()))
+                            selectedShape = shape;
+                        count ++;
+                    }
+                }
            }
         });
         
@@ -53,8 +67,8 @@ public class Canvas extends JPanel{
         Graphics2D g2 = (Graphics2D) g;
         for (Shape s : shapes){
             s.drawShape(g2);
-            if (s.isDrawn())
-                s.getBox().draw(g2);
+            if (selectedShape != null)
+                selectedShape.getBox().draw(g2);
         }
     }
     
