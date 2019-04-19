@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel{
-    ArrayList<Shape> shapes = new ArrayList<>();
+    private ArrayList<Shape> shapes = new ArrayList<>();
     private Color currentColor = Color.RED;
     private double currentSize = 1;
     private Shape selectedShape = null;
@@ -21,10 +21,6 @@ public class Canvas extends JPanel{
                 if(e.getButton() == 1){
                     shapes.add(new Shape(e.getPoint(), currentColor, 
                         currentSize));
-                   repaint();
-               }
-               if(e.getButton() == 3){
-                   shapes.clear();
                    repaint();
                }
            }
@@ -60,6 +56,8 @@ public class Canvas extends JPanel{
     // Setters for drawing attributes.
     public void changeColor(Color newColor) {currentColor = newColor; }
     public void changeSize(double newSize) {currentSize = newSize; }
+    
+    public ArrayList<Shape> getShapes() {return shapes;}
     
     @Override
     public void paintComponent(Graphics g){

@@ -1,12 +1,15 @@
 package drawinggame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 public class Frame extends JFrame {
     public Canvas canvas;
@@ -17,7 +20,8 @@ public class Frame extends JFrame {
         
         setSize(600, 600);
         canvas = new Canvas();
-        add(canvas);
+        setLayout(new BorderLayout());
+        add(canvas, BorderLayout.CENTER);
         
         JMenuBar bar = new JMenuBar();
         setJMenuBar(bar);
@@ -45,6 +49,20 @@ public class Frame extends JFrame {
         s1.addActionListener(new SizeListener(1));
         s2.addActionListener(new SizeListener(2));
         s5.addActionListener(new SizeListener(5));
+        
+        // Adding reset button
+        JPanel options = new JPanel();
+        JButton repaint = new JButton("repaint");
+        options.add(repaint);
+        add(options, BorderLayout.SOUTH);
+        
+        repaint.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                canvas.getShapes().clear();
+                canvas.repaint();
+            }
+        });
     }
     
     class ColorListener implements ActionListener {
