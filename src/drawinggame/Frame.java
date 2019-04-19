@@ -55,12 +55,12 @@ public class Frame extends JFrame {
         s2.addActionListener(new SizeListener(2));
         s5.addActionListener(new SizeListener(5));
         
-        // Adding reset button that removes all the shapes from canvas.
+        // A panel for optional buttons.
         JPanel options = new JPanel();
+        
+        // Adding reset button that removes all the shapes from canvas.
         JButton repaint = new JButton("repaint");
         options.add(repaint);
-        add(options, BorderLayout.SOUTH);
-        
         repaint.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -68,8 +68,19 @@ public class Frame extends JFrame {
                 canvas.repaint();
             }
         });
+        
+        // Adding buttons that change the canvas mode
+        JButton modeEdit = new JButton("edit mode");
+        JButton modeDraw = new JButton("draw mode");
+        options.add(modeEdit);
+        options.add(modeDraw);
+        modeEdit.addActionListener(new ModeListener('e'));
+        modeDraw.addActionListener(new ModeListener('d'));
+                
+        add(options, BorderLayout.SOUTH);
     }
     
+    // ActionListeners for menu items and buttons
     class ColorListener implements ActionListener {
         private Color color;
         
@@ -90,6 +101,20 @@ public class Frame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e){
             canvas.changeWidth(size);
+        }
+    }
+    class ModeListener implements ActionListener {
+        private char mode;
+        
+        public ModeListener() {mode = 'd';}
+        public ModeListener(char mode) {this.mode = mode;}
+        
+        @Override
+        public void actionPerformed(ActionEvent e){
+            canvas.setMode(mode);
+            if (mode == 'd')
+                canvas.unselectShape();
+                canvas.repaint();
         }
     }
 }

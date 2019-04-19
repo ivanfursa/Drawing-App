@@ -14,21 +14,23 @@ public class Canvas extends JPanel{
     private Color currentColor = Color.RED;
     private double currentStrokeWidth = 1;
     private Shape selectedShape = null;
+    private char mode = 'd';
     
     public Canvas(){
         
         addMouseListener(new MouseAdapter(){
-            // Instantiating a new shape.
             public void mousePressed(MouseEvent e){
-                if(e.getButton() == 1){
+                // Instantiating a new shape. Only in drawing mode.
+                if(e.getButton() == 1 && mode == 'd'){
                     shapes.add(new Shape(e.getPoint(), currentColor, 
                         currentStrokeWidth));
                    repaint();
-               }
-           }
-            // Shape is selected using left-click.
+                }
+            }
+            
             public void mouseClicked(MouseEvent e){
-                if(e.getButton() == 1){
+                // Shape is selected using left-click. Only in edit mode.
+                if(e.getButton() == 1 && mode == 'e'){
                     selectedShape = null;
                     int count = 0;
                     while (count < shapes.size() && selectedShape == null){
@@ -43,9 +45,10 @@ public class Canvas extends JPanel{
         });
         
         addMouseMotionListener(new MouseMotionAdapter(){
-            // Add points to the shape being drawn.
             public void mouseDragged(MouseEvent e){
-                if((MouseEvent.BUTTON1_DOWN_MASK & e.getModifiersEx())!= 0){
+                // Add points to the shape being drawn. Only in drawing mode.
+                if((MouseEvent.BUTTON1_DOWN_MASK & e.getModifiersEx())!= 0
+                        && mode == 'd'){
                    shapes.get(shapes.size()-1).addPoint(e.getPoint());
                    repaint();
                 }
@@ -58,6 +61,10 @@ public class Canvas extends JPanel{
     public void changeWidth(double newWidth) {currentStrokeWidth = newWidth; }
     // Getter for shapes arraylist.
     public ArrayList<Shape> getShapes() {return shapes;}
+    // Setter for canvas mode.
+    public void setMode(char mode) {this.mode = mode;}
+    // Unselect shape to remove the box around it.
+    public void unselectShape() {selectedShape = null;}
     
     @Override
     public void paintComponent(Graphics g){
