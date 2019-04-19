@@ -20,7 +20,7 @@ public class Shape {
         this.size = size;
         points.add(point);
         box = new BoxBorder(point.getX(), point.getX(),
-                point.getY(), point.getY());
+                point.getY(), point.getY(), size);
     }
     public Shape(){}
     

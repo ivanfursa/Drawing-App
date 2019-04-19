@@ -9,23 +9,26 @@ import java.awt.geom.Rectangle2D;
 class BoxBorder {
     // The corners of the box enclosure.
     private double xMin, xMax, yMin, yMax;
+    private double size;
     
-    public BoxBorder(double xMin, double xMax, double yMin, double yMax){
-        this.xMin = xMin;
-        this.xMax = xMax;
-        this.yMin = yMin;
-        this.yMax = yMax;
+    public BoxBorder(double xMin, double xMax,
+            double yMin, double yMax, double size){
+        this.xMin = xMin - size;
+        this.xMax = xMax + size;
+        this.yMin = yMin - size;
+        this.yMax = yMax + size;
+        this.size = size;
     }
     
     public void update(Point2D point){
         if (point.getX() < xMin)
-            xMin = point.getX();
+            xMin = point.getX() - size;
         else if (point.getX() > xMax)
-            xMax = point.getX();
+            xMax = point.getX() + size;
         if (point.getY() < yMin)
-            yMin = point.getY();
+            yMin = point.getY() - size;
         else if (point.getY() > yMax)
-            yMax = point.getY();
+            yMax = point.getY() + size;
     }
     
     public void draw(Graphics2D g2){
