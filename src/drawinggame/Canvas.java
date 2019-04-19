@@ -13,7 +13,7 @@ public class Canvas extends JPanel{
     private ArrayList<Shape> shapes = new ArrayList<>();
     private Color currentColor = Color.RED;
     private double currentStrokeWidth = 1;
-    // Index of a selected shape
+    // Index of a selected shape. -1 means no shape is selected
     private int selectedShape = -1;
     // Shapes that user might have wanted to select.
     private ArrayList<Shape> underSelection = new ArrayList<>();
@@ -29,11 +29,8 @@ public class Canvas extends JPanel{
                         currentStrokeWidth));
                    repaint();
                 }
-            }
-            
-            public void mouseClicked(MouseEvent e){
                 // Shape is selected using left-click. Only in edit mode.
-                if(e.getButton() == 1 && mode == 'e'){
+                else if(e.getButton() == 1 && mode == 'e'){
                     underSelection.clear();
                     selectedShape = -1;
                     int count = 0;
@@ -42,6 +39,7 @@ public class Canvas extends JPanel{
                             selectedShape = 0;
                             repaint();  // to show selection box immediately
                             underSelection.add(shapes.get(count));
+                            underSelection.get(selectedShape).setShiftReference(e.getPoint());
                         }
                         count ++;
                     }
@@ -57,7 +55,9 @@ public class Canvas extends JPanel{
                         repaint();
                     }
                 }
-           }
+            }
+            
+            public void mouseClicked(MouseEvent e){}
         });
         
         addMouseMotionListener(new MouseMotionAdapter(){
@@ -67,6 +67,14 @@ public class Canvas extends JPanel{
                         && mode == 'd'){
                    shapes.get(shapes.size()-1).addPoint(e.getPoint());
                    repaint();
+                }
+                // Move the shape. Only in edit mode.
+                if((MouseEvent.BUTTON1_DOWN_MASK & e.getModifiersEx())!= 0
+                        && mode == 'e'){
+                    if (selectedShape != -1){
+                        underSelection.get(selectedShape).shift(e.getPoint());
+                        repaint();
+                    }
                 }
             }  
         });

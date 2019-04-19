@@ -14,6 +14,9 @@ public class Shape {
     private Color color;
     private double strokeWidth;
     private BoxBorder box;
+    
+    // A point in relation to which a shape is shifted.
+    private Point2D shiftReference;
        
     // Constructors
     public Shape(Point2D point, Color color, double strokeWidth){
@@ -58,5 +61,28 @@ public class Shape {
         }
     }
     
+    // Setter for shift reference.
+    public void setShiftReference(Point2D point) {shiftReference = point;}
+    // The mouse position point is compared to the shift reference point
+    // and all the points in the shape are moved according to the difference
+    public void shift(Point2D shiftPoint){
+        double xShift = shiftPoint.getX() - shiftReference.getX();
+        double yShift = shiftPoint.getY() - shiftReference.getY();
+        
+        for (int i = 0; i < points.size(); i++){
+            Point2D point = points.get(i);
+            points.add(i, new Point2D.Double(point.getX()+xShift,
+                    point.getY()+yShift));
+            points.remove(i+1);
+        }
+        
+        // Box must also be updated.
+        box.xMax += xShift;
+        box.xMin += xShift;
+        box.yMax += yShift;
+        box.yMin += yShift;
+        
+        shiftReference = shiftPoint;
+    }
     
 }
