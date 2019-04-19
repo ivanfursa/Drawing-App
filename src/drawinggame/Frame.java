@@ -19,30 +19,35 @@ public class Frame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         setSize(600, 600);
-        canvas = new Canvas();
         setLayout(new BorderLayout());
+        
+        canvas = new Canvas();
         add(canvas, BorderLayout.CENTER);
         
+        // Adding a manu that provides brush color and size options
         JMenuBar bar = new JMenuBar();
         setJMenuBar(bar);
+        
         JMenu colorMenu = new JMenu("Color");
         JMenu sizeMenu = new JMenu("Size");
         bar.add(colorMenu);
         bar.add(sizeMenu);
+        
         JMenuItem green = new JMenuItem("Green");
         JMenuItem red = new JMenuItem("Red");
         JMenuItem blue = new JMenuItem("Blue");
-        JMenuItem s1 = new JMenuItem("1");
-        JMenuItem s2 = new JMenuItem("2");
-        JMenuItem s5 = new JMenuItem("5");
-        
         colorMenu.add(green);
         colorMenu.add(red);
         colorMenu.add(blue);
+        
+        JMenuItem s1 = new JMenuItem("1");
+        JMenuItem s2 = new JMenuItem("2");
+        JMenuItem s5 = new JMenuItem("5");      
         sizeMenu.add(s1);
         sizeMenu.add(s2);
         sizeMenu.add(s5);
         
+        // Action listeners for the menu items.
         green.addActionListener(new ColorListener(Color.GREEN));
         red.addActionListener(new ColorListener(Color.RED));
         blue.addActionListener(new ColorListener(Color.BLUE));
@@ -50,7 +55,7 @@ public class Frame extends JFrame {
         s2.addActionListener(new SizeListener(2));
         s5.addActionListener(new SizeListener(5));
         
-        // Adding reset button
+        // Adding reset button that removes all the shapes from canvas.
         JPanel options = new JPanel();
         JButton repaint = new JButton("repaint");
         options.add(repaint);
@@ -84,7 +89,7 @@ public class Frame extends JFrame {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            canvas.changeSize(size);
+            canvas.changeWidth(size);
         }
     }
 }

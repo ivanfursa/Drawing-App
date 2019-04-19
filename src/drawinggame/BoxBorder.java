@@ -6,36 +6,39 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+// This object is a rectangular box around a shape which is used to denote that
+// the shape is selected
 class BoxBorder {
     // The corners of the box enclosure.
     public double xMin, xMax, yMin, yMax;
-    private double size;
+    // To fully enclose the shape, its stroke width must be taken to account
+    private double shapeStrokeWidth;
     
     public BoxBorder(double xMin, double xMax,
-            double yMin, double yMax, double size){
-        this.xMin = xMin - size;
-        this.xMax = xMax + size;
-        this.yMin = yMin - size;
-        this.yMax = yMax + size;
-        this.size = size;
+            double yMin, double yMax, double width){
+        this.xMin = xMin - width;
+        this.xMax = xMax + width;
+        this.yMin = yMin - width;
+        this.yMax = yMax + width;
+        shapeStrokeWidth = width;
     }
     
+    // While a shape is being drawn, the dimensions of its box are updated.
     public void update(Point2D point){
         if (point.getX() < xMin)
-            xMin = point.getX() - size;
+            xMin = point.getX() - shapeStrokeWidth;
         else if (point.getX() > xMax)
-            xMax = point.getX() + size;
+            xMax = point.getX() + shapeStrokeWidth;
         if (point.getY() < yMin)
-            yMin = point.getY() - size;
+            yMin = point.getY() - shapeStrokeWidth;
         else if (point.getY() > yMax)
-            yMax = point.getY() + size;
+            yMax = point.getY() + shapeStrokeWidth;
     }
     
     public void draw(Graphics2D g2){
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(1));
         
-        // Draw a rectangle enclosing the shape.
         double width = xMax - xMin;
         double height = yMax - yMin;
         

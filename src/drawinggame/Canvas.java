@@ -12,31 +12,30 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel{
     private ArrayList<Shape> shapes = new ArrayList<>();
     private Color currentColor = Color.RED;
-    private double currentSize = 1;
+    private double currentStrokeWidth = 1;
     private Shape selectedShape = null;
     
     public Canvas(){
+        
         addMouseListener(new MouseAdapter(){
-           public void mousePressed(MouseEvent e){
+            // Instantiating a new shape.
+            public void mousePressed(MouseEvent e){
                 if(e.getButton() == 1){
                     shapes.add(new Shape(e.getPoint(), currentColor, 
-                        currentSize));
+                        currentStrokeWidth));
                    repaint();
                }
            }
-           public void mouseReleased(MouseEvent e){
-                if(e.getButton() == 1)
-                    shapes.get(shapes.size()-1).setAsDrawn();
-           }
-           public void mouseClicked(MouseEvent e){
+            // Shape is selected using left-click.
+            public void mouseClicked(MouseEvent e){
                 if(e.getButton() == 1){
                     selectedShape = null;
                     int count = 0;
-                    Shape shape;
                     while (count < shapes.size() && selectedShape == null){
-                        shape = shapes.get(count);
-                        if (shape.isSelected(e.getPoint()))
-                            selectedShape = shape;
+                        if (shapes.get(count).isSelected(e.getPoint())){
+                            selectedShape = shapes.get(count);
+                            repaint();  // to show selection box immediately
+                        }
                         count ++;
                     }
                 }
@@ -44,6 +43,7 @@ public class Canvas extends JPanel{
         });
         
         addMouseMotionListener(new MouseMotionAdapter(){
+            // Add points to the shape being drawn.
             public void mouseDragged(MouseEvent e){
                 if((MouseEvent.BUTTON1_DOWN_MASK & e.getModifiersEx())!= 0){
                    shapes.get(shapes.size()-1).addPoint(e.getPoint());
@@ -55,8 +55,8 @@ public class Canvas extends JPanel{
     
     // Setters for drawing attributes.
     public void changeColor(Color newColor) {currentColor = newColor; }
-    public void changeSize(double newSize) {currentSize = newSize; }
-    
+    public void changeWidth(double newWidth) {currentStrokeWidth = newWidth; }
+    // Getter for shapes arraylist.
     public ArrayList<Shape> getShapes() {return shapes;}
     
     @Override

@@ -8,19 +8,20 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Shape {
+    // Hand-drawn shape is defined by a collection of points (their coordinates)
+    // on canvas. 
     private ArrayList<Point2D> points = new ArrayList<>();
     private Color color;
-    private double size;
-    private boolean drawn = false;  // Identifies if the shape has been drawn.
+    private double strokeWidth;
     private BoxBorder box;
        
     // Constructors
-    public Shape(Point2D point, Color color, double size){
+    public Shape(Point2D point, Color color, double strokeWidth){
         this.color = color;
-        this.size = size;
+        this.strokeWidth = strokeWidth;
         points.add(point);
         box = new BoxBorder(point.getX(), point.getX(),
-                point.getY(), point.getY(), size);
+                point.getY(), point.getY(), strokeWidth);
     }
     public Shape(){}
     
@@ -29,11 +30,10 @@ public class Shape {
         box.update(point);
     }
     
-    public void setAsDrawn() {drawn = true;}
-    public boolean isDrawn() {return drawn;}
-    
+    // Box getter.
     public BoxBorder getBox() {return box;}
     
+    // Check if a mouse was clicked on a rectangular area of the shape.
     public boolean isSelected(Point2D point){
         if (point.getX() < box.xMax && point.getX() > box.xMin){
             if (point.getY() < box.yMax && point.getY() > box.yMin)
@@ -47,7 +47,7 @@ public class Shape {
     
     public void drawShape(Graphics2D g2){
         g2.setPaint(color);
-        g2.setStroke(new BasicStroke((float)(size)));
+        g2.setStroke(new BasicStroke((float)(strokeWidth)));
         if (points.isEmpty()){
             return;
         }
