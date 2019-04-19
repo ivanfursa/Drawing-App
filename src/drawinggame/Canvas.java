@@ -13,7 +13,10 @@ public class Canvas extends JPanel{
     private ArrayList<Shape> shapes = new ArrayList<>();
     private Color currentColor = Color.RED;
     private double currentStrokeWidth = 1;
-    private Shape selectedShape = null;
+    // Index of a selected shape
+    private int selectedShape = -1;
+    // Shapes that user might have wanted to select.
+    private ArrayList<Shape> underSelection = new ArrayList<>();
     private char mode = 'd';
     
     public Canvas(){
@@ -31,14 +34,27 @@ public class Canvas extends JPanel{
             public void mouseClicked(MouseEvent e){
                 // Shape is selected using left-click. Only in edit mode.
                 if(e.getButton() == 1 && mode == 'e'){
-                    selectedShape = null;
+                    underSelection.clear();
+                    selectedShape = -1;
                     int count = 0;
-                    while (count < shapes.size() && selectedShape == null){
+                    while (count < shapes.size()){
                         if (shapes.get(count).isSelected(e.getPoint())){
-                            selectedShape = shapes.get(count);
+                            selectedShape = 0;
                             repaint();  // to show selection box immediately
+                            underSelection.add(shapes.get(count));
                         }
                         count ++;
+                    }
+                }
+                else if (e.getButton() == 2 && mode == 'e'
+                        && !underSelection.isEmpty()){
+                    if (selectedShape < underSelection.size()-1){
+                        selectedShape++;
+                        repaint();
+                    }
+                    else
+                        selectedShape = 0;{
+                        repaint();
                     }
                 }
            }
@@ -64,7 +80,7 @@ public class Canvas extends JPanel{
     // Setter for canvas mode.
     public void setMode(char mode) {this.mode = mode;}
     // Unselect shape to remove the box around it.
-    public void unselectShape() {selectedShape = null;}
+    public void unselectShape() {selectedShape = -1;}
     
     @Override
     public void paintComponent(Graphics g){
@@ -72,8 +88,8 @@ public class Canvas extends JPanel{
         Graphics2D g2 = (Graphics2D) g;
         for (Shape s : shapes){
             s.drawShape(g2);
-            if (selectedShape != null)
-                selectedShape.getBox().draw(g2);
+            if (selectedShape != -1)
+                underSelection.get(selectedShape).getBox().draw(g2);
         }
     }
     
