@@ -3,6 +3,8 @@ package drawinggame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -33,16 +35,17 @@ public class Canvas extends JPanel{
                 else if(e.getButton() == 1 && mode == 'e'){
                     underSelection.clear();
                     selectedShape = -1;
-                    int count = 0;
-                    while (count < shapes.size()){
-                        if (shapes.get(count).isSelected(e.getPoint())){
+                                        
+                    for (int i = 0; i < shapes.size(); i++){
+                        if (shapes.get(i).isSelected(e.getPoint())){
                             selectedShape = 0;
-                            repaint();  // to show selection box immediately
-                            underSelection.add(shapes.get(count));
+                            addToUnderSelection(i);
                             underSelection.get(selectedShape).setShiftReference(e.getPoint());
+                            repaint();  // to show selection box immediately
                         }
-                        count ++;
                     }
+                    
+                    repaint(); // Removes previous selection if clicked ouside
                 }
                 else if (e.getButton() == 2 && mode == 'e'
                         && !underSelection.isEmpty()){
@@ -78,6 +81,11 @@ public class Canvas extends JPanel{
                 }
             }  
         });
+        
+        addKeyListener(new KeyAdapter(){
+            public void keyTyped(KeyEvent e){
+            }
+        });
     }
     
     // Setters for drawing attributes.
@@ -89,6 +97,24 @@ public class Canvas extends JPanel{
     public void setMode(char mode) {this.mode = mode;}
     // Unselect shape to remove the box around it.
     public void unselectShape() {selectedShape = -1;}
+    
+    public void addToUnderSelection(int i){
+        // We want underSelection to be sorted by size: smaller > larger
+        // Therefore, given an index i of the shape to be placed in the list,
+        // we compare its area to the shapes' that are already there
+        if (underSelection.size() > 0){
+            double iArea = shapes.get(i).getBox().getArea();
+            double cArea;
+            for (int c = 0; c < underSelection.size(); c++){
+                cArea = underSelection.get(c).getBox().getArea();
+                if (iArea > cArea)
+                    ;
+                else
+                    underSelection.add(c, shapes.get(i));
+                    break;
+            }
+        } else underSelection.add(shapes.get(i));
+    }
     
     @Override
     public void paintComponent(Graphics g){

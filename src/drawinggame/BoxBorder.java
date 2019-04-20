@@ -35,6 +35,10 @@ class BoxBorder {
             yMax = point.getY() + shapeStrokeWidth;
     }
     
+    public double getArea(){
+        return (xMax - xMin) * (yMax - yMin);
+    }
+    
     public void draw(Graphics2D g2){
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(1));
