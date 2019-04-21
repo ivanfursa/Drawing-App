@@ -21,6 +21,9 @@ public class Canvas extends JPanel{
     private ArrayList<Shape> underSelection = new ArrayList<>();
     private char mode = 'd';
     
+    private boolean moveShape = false;
+    
+    
     public Canvas(){
         
         addMouseListener(new MouseAdapter(){
@@ -58,6 +61,10 @@ public class Canvas extends JPanel{
                         repaint();
                     }
                 }
+                else if (e.getButton() == 3 && mode == 'e'){
+                    moveShape = false;
+                    repaint();
+                }
             }
             
             public void mouseClicked(MouseEvent e){}
@@ -79,11 +86,27 @@ public class Canvas extends JPanel{
                         repaint();
                     }
                 }
-            }  
+            } 
+            
+            public void mouseMoved(MouseEvent e){
+                if (moveShape == true && mode == 'e'){
+                    if (selectedShape != -1){
+                        underSelection.get(selectedShape).shift(e.getPoint());
+                        repaint();
+                    }
+                }
+            }
         });
         
         addKeyListener(new KeyAdapter(){
             public void keyTyped(KeyEvent e){
+                if (e.getKeyChar() == 'm'){
+                    if (moveShape == false)
+                        moveShape = true;
+                    else
+                        moveShape = false;
+                    repaint();
+                }
             }
         });
     }

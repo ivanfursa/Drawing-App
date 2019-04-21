@@ -22,6 +22,7 @@ public class Frame extends JFrame {
         setLayout(new BorderLayout());
         
         canvas = new Canvas();
+        canvas.setFocusable(true);  // Allowing keyListener
         add(canvas, BorderLayout.CENTER);
         
         // Adding a manu that provides brush color and size options
@@ -60,6 +61,8 @@ public class Frame extends JFrame {
         
         // Adding reset button that removes all the shapes from canvas.
         JButton repaint = new JButton("repaint");
+        // Not letting the button taking a focus of keyboard.
+        repaint.setFocusable(false);
         options.add(repaint);
         repaint.addActionListener(new ActionListener(){
             @Override
@@ -72,6 +75,9 @@ public class Frame extends JFrame {
         // Adding buttons that change the canvas mode
         JButton modeEdit = new JButton("edit mode");
         JButton modeDraw = new JButton("draw mode");
+        // Not letting the buttons taking a focus of keyboard.
+        modeEdit.setFocusable(false);
+        modeDraw.setFocusable(false);
         options.add(modeEdit);
         options.add(modeDraw);
         modeEdit.addActionListener(new ModeListener('e'));
