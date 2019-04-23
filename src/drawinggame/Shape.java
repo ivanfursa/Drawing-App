@@ -28,8 +28,9 @@ public class Shape {
     }
     public Shape(){}
     
-    public void addPoint(Point2D point){
+    public void addPoint(Point2D point, ImageProcessor im){
         points.add(point);
+        im.addPixel(point, color);  // Update pixel canvas in Image Processor
         box.update(point);
     }
     
@@ -63,6 +64,7 @@ public class Shape {
     
     // Setter for shift reference.
     public void setShiftReference(Point2D point) {shiftReference = point;}
+    
     // The mouse position point is compared to the shift reference point
     // and all the points in the shape are moved according to the difference
     public void shift(Point2D shiftPoint){

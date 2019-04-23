@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -20,11 +21,17 @@ public class Canvas extends JPanel{
     // Shapes that user might have wanted to select.
     private ArrayList<Shape> underSelection = new ArrayList<>();
     private char mode = 'd';
+    private boolean moveShape = false;  // Allows moving a shape.
+    // Background
+    private Rectangle2D bg;
+    private Color bgColor = Color.WHITE;
+    // Image Processor
+    private ImageProcessor im;
     
-    private boolean moveShape = false;
-    
-    
-    public Canvas(){
+    public Canvas(int width, int height){
+        
+        bg = new Rectangle2D.Double(0,0,width,height);
+        im = new ImageProcessor(width, width, bgColor);
         
         addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e){
@@ -75,7 +82,7 @@ public class Canvas extends JPanel{
                 // Add points to the shape being drawn. Only in drawing mode.
                 if((MouseEvent.BUTTON1_DOWN_MASK & e.getModifiersEx())!= 0
                         && mode == 'd'){
-                   shapes.get(shapes.size()-1).addPoint(e.getPoint());
+                   shapes.get(shapes.size()-1).addPoint(e.getPoint(), im);
                    repaint();
                 }
                 // Move the shape. Only in edit mode.
@@ -143,6 +150,11 @@ public class Canvas extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        
+        // Draw a background
+        g2.setPaint(bgColor);
+        g2.fill(bg);
+        
         for (Shape s : shapes){
             s.drawShape(g2);
             if (selectedShape != -1)

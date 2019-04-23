@@ -13,15 +13,16 @@ import javax.swing.JPanel;
 
 public class Frame extends JFrame {
     public Canvas canvas;
+    private final int WIDTH = 600, HEIGHT = 600;
     
     public Frame() {
         super();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        setSize(600, 600);
+        setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout());
         
-        canvas = new Canvas();
+        canvas = new Canvas(WIDTH, HEIGHT);
         canvas.setFocusable(true);  // Allowing keyListener
         add(canvas, BorderLayout.CENTER);
         
